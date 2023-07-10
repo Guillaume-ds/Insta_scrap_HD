@@ -24,8 +24,12 @@ class instaScrapper():
 
     def __init__(self):
 
-        self.wd = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+        service = Service(executable_path='chromedriver/chromedriver.exe')
 
+        self.wd = webdriver.Chrome(service=service)
+       # except:
+       #     print('exception')
+        #    self.wd = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
         self.wd.maximize_window()
         self.url = "https://www.instagram.com/"
         self.see_more = 0
