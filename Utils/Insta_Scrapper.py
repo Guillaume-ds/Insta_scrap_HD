@@ -85,7 +85,7 @@ class instaScrapper():
 
         more_to_load = True
         i = 0
-
+        logging.warning('Scrap comment start')
         while more_to_load: 
             try:
                 see_more_button = WebDriverWait(self.wd,12).until(
@@ -95,6 +95,7 @@ class instaScrapper():
                 if see_more_button:
                     see_more_button.click()
                     i +=1 
+                
                 else:
                     comments = WebDriverWait(self.wd,10).until(
                                         EC.presence_of_element_located((
@@ -104,7 +105,7 @@ class instaScrapper():
                     soup = BeautifulSoup(comments.get_attribute('outerHTML') , 'html.parser') 
 
                     more_to_load = False
-
+                logging.warning('Scrap comment on going')
             except:
                 comments = WebDriverWait(self.wd,10).until(
                                         EC.presence_of_element_located((
@@ -117,14 +118,14 @@ class instaScrapper():
 
             sleep(1)
 
- 
+        logging.warning('Scrap comment finish')
         spans = soup.find_all('span', attrs={'class':'_aacl _aaco _aacu _aacx _aad7 _aade'})
         answers = [answer.getText().strip() for answer in spans]
         answers_df = pd.DataFrame({'answers':answers})
-
+        logging.warning('Saving')
         if save:
             answers_df.to_csv(path_or_buf=f"./data/{postId}_comments.csv",index=False)
-
+        logging.warning('Saved')
         return answers_df
 
 
