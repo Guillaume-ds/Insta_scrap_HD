@@ -91,11 +91,11 @@ class instaScrapper():
                 see_more_button = WebDriverWait(self.wd,12).until(
                                         EC.presence_of_element_located((
                                             By.XPATH, 
-                                            "//*[name()='svg' and @aria-label='Load more comments']")))
+                                            "/html/body/div[2]/div/div/div[3]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/div[1]/ul/li/div/button")))
                 if see_more_button:
                     see_more_button.click()
                     i +=1 
-                
+                    logging.warning('Scrap comment on going')
                 else:
                     comments = WebDriverWait(self.wd,10).until(
                                         EC.presence_of_element_located((
@@ -105,7 +105,7 @@ class instaScrapper():
                     soup = BeautifulSoup(comments.get_attribute('outerHTML') , 'html.parser') 
 
                     more_to_load = False
-                logging.warning('Scrap comment on going')
+                logging.warning('Scrap comment on going 2')
             except:
                 comments = WebDriverWait(self.wd,10).until(
                                         EC.presence_of_element_located((
