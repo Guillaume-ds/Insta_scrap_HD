@@ -35,12 +35,10 @@ with st.expander("Voir les réponses: "):
 
 st.divider()
 
+st.session_state.scores = [0,0,0]
+labels = ['oui','nsp','non']
+mycolors = [styles.color_pink, styles.color_grey, styles.color_purple]
 
-#multilang_classifier = pipeline("sentiment-analysis",model="cmarkea/distilcamembert-base-sentiment")
-
-#answers_df['scores'] = multilang_classifier(list(answers_df['answers']))
-#answers_df['confidence']= answers_df['scores'].apply(lambda x: x['score'])
-#answers_df['scores']= answers_df['scores'].apply(lambda x: x['label'])
 
 if "commentsAnalyser" in st.session_state:
     col1, col2, col3 = st.columns([3,2,3])
@@ -49,20 +47,58 @@ if "commentsAnalyser" in st.session_state:
         button_analyse =  st.button('Analyser les commentaires')
 
     if button_analyse:
-        with st.spinner('Analyse des commentaires...'):
+        with st.spinner('Analyse des commentaires, cela peut prendre 10 minutes...'):
             pos, neg, total = st.session_state.commentsAnalyser.get_simple_answers()
-            st.write("pos", pos)
-            st.success('Commentaires du post chargés!', icon="✅")
-            #st.error('Commentaires du post introuvables, veuillez les scrapper...', icon="🚨")
+            st.session_state.scores[0] = pos
+            st.session_state.scores[2] = neg
+            st.success('Premier résultats', icon="✅")
+
+            placeholder = st.empty()
+            with placeholder.container():
+                fig, ax = plt.subplots(figsize=(7,7))
+                ax.pie(st.session_state.scores,
+                    labels = labels, 
+                    startangle = 270, 
+                    colors=mycolors,
+                    autopct='%1.1f%%',
+                    counterclock=False,
+                    pctdistance=.5, 
+                    wedgeprops={'linewidth': 1.0, 
+                                'edgecolor': 'white'},
+                    textprops={
+                        'color':'white'
+                    })
+                ax.legend()
+                st.pyplot(fig)
+
+            st.session_state.complex_answers = st.session_state.commentsAnalyser.analyse_complexe_answers()
+            value_couts = st.session_state.complex_answers['labels'].value_counts()
+            st.session_state.scores[0] +=  value_couts['pour']
+            st.session_state.scores[1] +=  value_couts['neutre']
+            st.session_state.scores[2] +=  value_couts['contre']
+            st.success('Commentaires analysés', icon="✅")
+            placeholder.empty()
+            with placeholder.container():
+                fig, ax = plt.subplots(figsize=(7,7))
+                ax.pie(st.session_state.scores,
+                    labels = labels, 
+                    startangle = 270, 
+                    colors=mycolors,
+                    autopct='%1.1f%%',
+                    counterclock=False,
+                    labeldistance=.6,
+                    pctdistance=.3, 
+                    wedgeprops={'linewidth': 1.0, 
+                                'edgecolor': 'white'},
+                    textprops={
+                        'color':'white'
+                    })
+
+                st.pyplot(fig)
 
 
 
-    scores = [0.43,0.12,0.45]
-    labels = ['oui','nsp','non']
 
-    mycolors = [styles.color_pink, styles.color_grey, styles.color_purple]
 
-    fig, ax = plt.subplots(figsize=(7,7))
-    ax.pie(scores,labels = labels, startangle = 270, colors=mycolors)
 
-    st.pyplot(fig)
+

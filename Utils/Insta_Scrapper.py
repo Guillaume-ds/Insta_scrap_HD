@@ -37,7 +37,7 @@ class instaScrapper():
         """
         
         self.wd.get(self.url)
-        self.wd.implicitly_wait(2)
+        self.wd.implicitly_wait(5)
 
         sleep(0.5)
 
@@ -54,12 +54,12 @@ class instaScrapper():
         password_field = WebDriverWait(self.wd,10).until(EC.presence_of_element_located((By.NAME,'password')))
         password_field.send_keys(pw)
 
-        sleep(1)
+        sleep(2)
 
         login_button = WebDriverWait(self.wd,12).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="loginForm"]/div/div[3]/button/div')))
         login_button.click() 
 
-        sleep(5)      
+        sleep(7)      
 
     def scrap_post_comments(self,postId="CszJv_oLchO", save=True):
 
@@ -108,4 +108,5 @@ class instaScrapper():
             answers_df.to_csv(path_or_buf=f"./data/{postId}_comments.csv",index=False)
 
         return answers_df
+
 

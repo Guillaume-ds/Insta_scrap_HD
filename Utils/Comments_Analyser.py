@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 import re 
+from transformers import pipeline
+
 
 
 class commentsAnalyser():
@@ -11,6 +13,10 @@ class commentsAnalyser():
         self.pos_index = []
         self.neg_index = []
         self.simple_answers_indexes = []
+
+        self.complexe_answers_df = []
+
+        self.classifier = pipeline("zero-shot-classification", model="MoritzLaurer/mDeBERTa-v3-base-mnli-xnli")
 
     def get_dataset(self):
         try:
@@ -42,8 +48,17 @@ class commentsAnalyser():
         return (len(self.pos_index),len(self.neg_index),len(self.simple_answers_indexes))
 
     def analyse_complexe_answers(self):
-        complexe_answers_df = self.answers[~(self.answers.index.isin(self.simple_answers_indexes))]
-        sequence_to_classify = list(complexe_answers_df.answers.values)
-        candidate_labels = ["pour", "contre", "neutre"]
-        output = classifier(sequence_to_classify, candidate_labels, multi_label=False)
-        complexe_answers_df
+        self.complexe_answers_df = self.answers[~(self.answers.index.isin(self.simple_answers_indexes))]
+        sequence_to_classify = list(self.complexe_answers_df.answers.values)
+        candidate_labels = ["pour","contre","neutre"]
+        output = self.classifier (sequence_to_classify, candidate_labels, multi_label=False)
+        labels = [answer['labels'][0] for answer in output]
+        self.complexe_answers_df['labels'] = labels
+        scores = [answer['scores'][0] for answer in output]
+        self.complexe_answers_df['scores'] = scores
+        
+        self.answers = self.answers.merge(self.complexe_answers_df,how='outer')
+        return self.complexe_answers_df
+
+    def save_df(self):
+        self.answers .to_csv(path_or_buf=f"./data/{self.postId}_comments.csv",index=False)
