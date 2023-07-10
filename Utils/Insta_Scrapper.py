@@ -30,7 +30,7 @@ class instaScrapper():
 
         _ = installff()
         opts = FirefoxOptions()
-        #opts.add_argument("--headless")
+        opts.add_argument("--headless")
         self.wd = webdriver.Firefox(options=opts)
         
         logging.warning('init scrapper over')
