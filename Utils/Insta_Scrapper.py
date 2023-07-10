@@ -59,10 +59,10 @@ class instaScrapper():
         logging.warning('got url ')
         sleep(0.5)
 
-        cookie_button = WebDriverWait(self.wd,15).until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/button[1]")))
-        cookie_button.click() 
-        print('got cookies ')
-        sleep(0.9)
+        # cookie_button = WebDriverWait(self.wd,15).until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/button[1]")))
+        # cookie_button.click() 
+        # print('got cookies ')
+        # sleep(0.9)
 
         username_field = WebDriverWait(self.wd,12).until(EC.presence_of_element_located((By.NAME,'username')))
         username_field.send_keys(username)
@@ -107,6 +107,7 @@ class instaScrapper():
                     more_to_load = False
                 logging.warning('Scrap comment on going 2')
             except:
+                logging.warning('Scrap comment failed')
                 comments = WebDriverWait(self.wd,10).until(
                                         EC.presence_of_element_located((
                                             By.XPATH,
