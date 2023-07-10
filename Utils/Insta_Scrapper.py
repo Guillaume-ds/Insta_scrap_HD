@@ -1,11 +1,11 @@
 from selenium import webdriver
-
+import logging
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-
+from selenium.webdriver import FirefoxOptions
 from selenium.webdriver.chrome.options import Options
 
 from time import sleep 
@@ -23,11 +23,17 @@ class instaScrapper():
     """
 
     def __init__(self):
-        print('init scrapper')
-        options = webdriver.ChromeOptions()
-        options.headless = True
-        self.wd = webdriver.Chrome(options=options)
-        print('init scrapper over')
+        @st.experimental_singleton
+        def installff():
+            os.system('sbase install geckodriver')
+            os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
+
+        _ = installff()
+        opts = FirefoxOptions()
+        opts.add_argument("--headless")
+        self.wd = webdriver.Firefox(options=opts)
+        
+        logging.warning('init scrapper over')
        # except:
        #     print('exception')
         #    self.wd = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -47,10 +53,10 @@ class instaScrapper():
         
         Note: sleeps are there to avoid bot detection
         """
-        print('init login in ')
+        logging.warning('init login in ')
         self.wd.get(self.url)
         self.wd.implicitly_wait(5)
-        print('got url ')
+        logging.warning('got url ')
         sleep(0.5)
 
         # cookie_button = WebDriverWait(self.wd,15).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Autoriser tous les cookies']")))
