@@ -40,7 +40,11 @@ with col2:
 
 if start_scrapping:
     with st.spinner('Scrapping the comments. This may take a few minutes du to bot restrictions...'):
-        config = dotenv_values(".env") 
+        try:
+            config = st.secrets
+            
+        except:
+            config = dotenv_values(".env") 
         scraper = Insta_Scrapper.instaScrapper()
 
     with st.spinner('Login into instagram...'):
@@ -54,7 +58,7 @@ if start_scrapping:
             st.session_state.answers_df = scraper.scrap_post_comments(postId=postId)
             st.success('Done!')
         except:
-            st.error('Erreur, veuillez re essayer', icon="🚨")
+            st.error('Erreur, veuillez re essayer ', icon="🚨")
 
 
 
