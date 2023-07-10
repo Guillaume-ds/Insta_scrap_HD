@@ -23,9 +23,11 @@ class instaScrapper():
     """
 
     def __init__(self):
+        print('init scrapper')
         options = webdriver.ChromeOptions()
         options.headless = True
         self.wd = webdriver.Chrome(options=options)
+        print('init scrapper over')
        # except:
        #     print('exception')
         #    self.wd = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -45,30 +47,30 @@ class instaScrapper():
         
         Note: sleeps are there to avoid bot detection
         """
-        
+        print('init login in ')
         self.wd.get(self.url)
         self.wd.implicitly_wait(5)
-
+        print('got url ')
         sleep(0.5)
 
-        cookie_button = WebDriverWait(self.wd,15).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Autoriser tous les cookies']")))
-        cookie_button.click() 
-
+        # cookie_button = WebDriverWait(self.wd,15).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Autoriser tous les cookies']")))
+        # cookie_button.click() 
+        # print('got cookies ')
         sleep(0.9)
 
         username_field = WebDriverWait(self.wd,12).until(EC.presence_of_element_located((By.NAME,'username')))
         username_field.send_keys(username)
-
+        print('got user  ')
         sleep(1.1)
 
         password_field = WebDriverWait(self.wd,10).until(EC.presence_of_element_located((By.NAME,'password')))
         password_field.send_keys(pw)
-
+        print('got password  ')
         sleep(2)
 
         login_button = WebDriverWait(self.wd,12).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="loginForm"]/div/div[3]/button/div')))
         login_button.click() 
-
+        print('got login  ')
         sleep(7)      
 
     def scrap_post_comments(self,postId="CszJv_oLchO", save=True):

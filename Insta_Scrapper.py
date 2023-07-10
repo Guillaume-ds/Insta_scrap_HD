@@ -48,6 +48,7 @@ if start_scrapping:
 
     with st.spinner('Login into instagram...'):
         try:
+            print('loging in')
             scraper.login_instagram(username=config['USERNAME'],pw=config['PW'])
         except:
             st.error('Login impossible', icon="🚨")
