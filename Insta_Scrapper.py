@@ -42,7 +42,6 @@ if start_scrapping:
     with st.spinner('Scrapping the comments. This may take a few minutes du to bot restrictions...'):
         try:
             config = st.secrets
-            
         except:
             config = dotenv_values(".env") 
         scraper = Insta_Scrapper.instaScrapper()
@@ -59,6 +58,5 @@ if start_scrapping:
             st.success('Done!')
         except:
             st.error('Erreur, veuillez re essayer ', icon="🚨")
-
 
 

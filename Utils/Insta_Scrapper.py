@@ -1,12 +1,17 @@
 from selenium import webdriver
+
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
+from selenium.webdriver.chrome.options import Options
+
 from time import sleep 
 import pandas as pd
+import os
+import streamlit as st
 
 from bs4 import BeautifulSoup
 
@@ -18,7 +23,19 @@ class instaScrapper():
     """
 
     def __init__(self):
-        self.wd = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+        @st.cache_resource
+        def get_driver():
+            return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+        options = Options()
+        options.add_argument('--disable-gpu')
+        options.add_argument('--headless')
+
+        self.wd = get_driver()
+       # except:
+       #     print('exception')
+        #    self.wd = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
         self.wd.maximize_window()
         self.url = "https://www.instagram.com/"
         self.see_more = 0
