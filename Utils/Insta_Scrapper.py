@@ -30,7 +30,7 @@ class instaScrapper():
 
         _ = installff()
         opts = FirefoxOptions()
-        opts.add_argument("--headless")
+        #opts.add_argument("--headless")
         self.wd = webdriver.Firefox(options=opts)
         
         logging.warning('init scrapper over')
@@ -59,9 +59,9 @@ class instaScrapper():
         logging.warning('got url ')
         sleep(0.5)
 
-        # cookie_button = WebDriverWait(self.wd,15).until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Autoriser tous les cookies']")))
-        # cookie_button.click() 
-        # print('got cookies ')
+        cookie_button = WebDriverWait(self.wd,15).until(EC.element_to_be_clickable((By.XPATH, "/html/body/div[2]/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/button[1]")))
+        cookie_button.click() 
+        print('got cookies ')
         sleep(0.9)
 
         username_field = WebDriverWait(self.wd,12).until(EC.presence_of_element_located((By.NAME,'username')))
@@ -91,7 +91,7 @@ class instaScrapper():
                 see_more_button = WebDriverWait(self.wd,12).until(
                                         EC.presence_of_element_located((
                                             By.XPATH, 
-                                            "/html/body/div[2]/div/div/div[3]/div/div/div[1]/div/div[3]/div/div/div/div/div[2]/div/article/div/div[2]/div/div/div[2]/div[1]/ul/li/div/button")))
+                                            "/html/body/div[2]/div/div/div[2]/div/div/div/div[1]/div[1]/div[2]/section/main/div/div[1]/div/div[2]/div/div[2]/div/div/ul/li/div/button")))
                 if see_more_button:
                     see_more_button.click()
                     i +=1 
