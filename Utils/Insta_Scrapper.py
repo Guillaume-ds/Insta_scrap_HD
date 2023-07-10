@@ -23,7 +23,7 @@ class instaScrapper():
     """
 
     def __init__(self):
-        @st.experimental_singleton
+        @st.st.cache_resource 
         def installff():
             os.system('sbase install geckodriver')
             os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
@@ -91,7 +91,7 @@ class instaScrapper():
                 see_more_button = WebDriverWait(self.wd,12).until(
                                         EC.presence_of_element_located((
                                             By.XPATH, 
-                                            "//*[name()='svg' and @aria-label='Charger d’autres commentaires']")))
+                                            "//*[name()='svg' and @aria-label='Load more comments']")))
                 if see_more_button:
                     see_more_button.click()
                     i +=1 
